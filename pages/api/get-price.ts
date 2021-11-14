@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import CoinGeckoClient from "@lib/coingecko";
+import Cors from "cors";
 
 interface CoinProps {
   id: string;
@@ -8,7 +9,27 @@ interface CoinProps {
   market_data: any;
 }
 
+// Initializing the cors middleware
+const cors = Cors({
+  methods: ["GET", "HEAD"],
+});
+
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+
+      return resolve(result);
+    });
+  });
+}
+
 const GetPrice = async (req: NextApiRequest, res: NextApiResponse) => {
+  await runMiddleware(req, res, cors);
   const { symbols } = req.query;
 
   if (!symbols) return res.status(400).json({ error: "Must send a request" });
@@ -50,7 +71,3 @@ const GetPrice = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default GetPrice;
-
-export const config = {
-  methods: ["GET"],
-};
