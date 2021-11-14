@@ -1,12 +1,12 @@
 import CoinInfo from "@components/CoinInfo";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { motion } from "framer-motion";
 
 const fetcher = async () => {
   const { data } = await axios.get(
     "/api/get-price?symbols=eth,ens,xsushi,cro,lrc,matic,ohm",
     {
-      // Update BASEURL later
       baseURL:
         process.env.NODE_ENV !== "development"
           ? "https://natelook.com"
@@ -21,6 +21,7 @@ export default function WatchListPage({ coins }) {
   const { data } = useQuery("watchlist", fetcher, {
     initialData: coins,
     refetchInterval: 10000,
+    refetchOnMount: true,
   });
 
   return (
@@ -28,22 +29,27 @@ export default function WatchListPage({ coins }) {
       <main>
         <h1 className="text-5xl font-bold uppercase mb-3">My Watchlist</h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-cols-1 gap-3">
-          {data.map((token) => (
-            <a
-              href={`https://www.coingecko.com/en/coins/${token.id}`}
-              key={token.id}
-            >
-              <CoinInfo coin={token} />
-            </a>
-          ))}
+          {coins &&
+            data.map((token, i) => (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.05 * i }}
+                key={token.id}
+              >
+                <a href={`https://www.coingecko.com/en/coins/${token.id}`}>
+                  <CoinInfo coin={token} />
+                </a>
+              </motion.div>
+            ))}
         </div>
       </main>
     </div>
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const coins = await fetcher();
 
-  return { props: { coins } };
+  return { props: { coins }, revalidate: 1 };
 }

@@ -32,7 +32,9 @@ export default function Nav() {
           {navLinks.map((link) => (
             <li key={link.slug}>
               <Link href={link.slug}>
-                <a>{link.name}</a>
+                <a className="hover:text-blue-600 transition-colors duration-150">
+                  {link.name}
+                </a>
               </Link>
             </li>
           ))}
