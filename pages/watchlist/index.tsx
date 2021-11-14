@@ -1,20 +1,19 @@
 import CoinInfo from "@components/CoinInfo";
-import axios from "axios";
 import { useQuery } from "react-query";
 import { motion } from "framer-motion";
+import getWatchlist from "@lib/get-watchlist";
 
 const fetcher = async () => {
-  const { data } = await axios.get(
-    "/api/get-price?symbols=eth,ens,xsushi,cro,lrc,matic,ohm",
-    {
-      baseURL:
-        process.env.NODE_ENV !== "development"
-          ? "https://natelook.com"
-          : "http://localhost:3000",
-    }
-  );
-
-  return data;
+  return await getWatchlist([
+    "btc",
+    "eth",
+    "ens",
+    "xsushi",
+    "ohm",
+    "matic",
+    "lrc",
+    "link",
+  ]);
 };
 
 export default function WatchListPage({ coins }) {
@@ -51,5 +50,5 @@ export default function WatchListPage({ coins }) {
 export async function getStaticProps() {
   const coins = await fetcher();
 
-  return { props: { coins }, revalidate: 60 };
+  return { props: { coins }, revalidate: 30 };
 }

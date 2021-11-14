@@ -7,7 +7,13 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import React from "react";
 import { ReactQueryDevtools } from "react-query/devtools";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+});
 
 function NextWeb3App({ Component, pageProps }: AppProps) {
   return (
