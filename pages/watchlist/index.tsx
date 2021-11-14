@@ -20,7 +20,7 @@ const fetcher = async () => {
 export default function WatchListPage({ coins }) {
   const { data } = useQuery("watchlist", fetcher, {
     initialData: coins,
-    refetchInterval: 10000,
+    refetchInterval: 30000,
     refetchOnMount: true,
   });
 
@@ -51,5 +51,5 @@ export default function WatchListPage({ coins }) {
 export async function getStaticProps() {
   const coins = await fetcher();
 
-  return { props: { coins }, revalidate: 1 };
+  return { props: { coins }, revalidate: 60 };
 }
