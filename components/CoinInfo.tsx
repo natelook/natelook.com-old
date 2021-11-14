@@ -17,7 +17,7 @@ interface Props {
 
 export default function CoinInfo({ coin }: Props) {
   return (
-    <div className="flex space-x-3 bg-white shadow-lg p-4 border rounded">
+    <div className="flex space-x-3 bg-white shadow-lg p-4 border rounded transform hover:scale-105 transition-transform duration-150">
       <div className="flex items-center">
         <Image
           src={coin.image}
@@ -36,7 +36,7 @@ export default function CoinInfo({ coin }: Props) {
         <div className="flex space-x-3 items-center">
           <span
             className={classNames({
-              "text-red-600": Math.sign(coin.changePercentage) == -1,
+              "text-gray-400": Math.sign(coin.changePercentage) == -1,
               "text-green-600": Math.sign(coin.changePercentage) !== -1,
             })}
           >
@@ -44,7 +44,7 @@ export default function CoinInfo({ coin }: Props) {
           </span>
           <span
             className={classNames({
-              "text-red-600": Math.sign(coin.changePrice) == -1,
+              "text-gray-400": Math.sign(coin.changePrice) == -1,
               "text-green-600": Math.sign(coin.changePrice) !== -1,
             })}
           >

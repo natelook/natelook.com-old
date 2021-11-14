@@ -33,7 +33,7 @@ const GetPrice = async (req: NextApiRequest, res: NextApiResponse) => {
     const { data: tokenInfo } = await CoinGeckoClient.coins.fetch(tokenId);
 
     const token = {
-      id: tokenInfo.name,
+      id: tokenInfo.id,
       symbol: tokenInfo.symbol,
       name: tokenInfo.name,
       description: tokenInfo.description.en,
