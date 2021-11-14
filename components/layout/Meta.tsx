@@ -3,7 +3,7 @@ import Head from "next/head";
 export default function Meta() {
   return (
     <Head>
-      <title>next-web3-boilerplate</title>
+      <title>natelook.eth</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
   );

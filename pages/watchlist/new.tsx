@@ -31,13 +31,18 @@ interface TokenData {
 
 interface Props {
   tokenData: TokenData | null;
+  address: string | null;
   error?: string;
 }
 
-export default function NewWatchListItem({ tokenData, error }: Props) {
+export default function NewWatchListItem({ tokenData, address, error }: Props) {
   const { account } = useWeb3React();
   const isMe = useCheckMyWalletAddress(account);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      address: address ? address : null,
+    },
+  });
   const router = useRouter();
 
   const onSubmit = async ({ address }: { address: string }) => {
@@ -47,7 +52,7 @@ export default function NewWatchListItem({ tokenData, error }: Props) {
 
   const token = tokenData ? Object.values(tokenData.data)[0] : null;
   return (
-    <div className="md:mt-60">
+    <div className="h-screen flex items-center justify-center">
       {isMe && (
         <main className="flex justify-center items-center flex-col">
           <div className="max-w-lg w-full p-12 border rounded shadow-md">
@@ -116,7 +121,6 @@ export default function NewWatchListItem({ tokenData, error }: Props) {
                     </div>
                   </div>
                 </React.Fragment>
-                // JSON.stringify(Object.values(tokenData.data)[0], null, 4)
               )}
             </div>
           </div>
@@ -126,12 +130,10 @@ export default function NewWatchListItem({ tokenData, error }: Props) {
   );
 }
 
-export async function getServerSideProps({
-  params,
-  query,
-}: GetServerSidePropsContext) {
+export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   const { address } = query;
-  if (!address) return { props: { tokenData: null } };
+  if (!address)
+    return { props: { tokenData: null, address: address ? address : null } };
 
   try {
     const { data: tokenData } = await axios.get(
@@ -142,8 +144,11 @@ export async function getServerSideProps({
         },
       }
     );
-    return { props: { tokenData } };
+    return { props: { tokenData, address: address ? address : null } };
   } catch (error) {
-    return { props: { error: "Token not found" } };
+    console.log({ error });
+    return {
+      props: { error: "Token not found", address: address ? address : null },
+    };
   }
 }
