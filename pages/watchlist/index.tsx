@@ -2,6 +2,7 @@ import CoinInfo from "@components/CoinInfo";
 import { useQuery } from "react-query";
 import { motion } from "framer-motion";
 import getWatchlist from "@lib/get-watchlist";
+import axios from "axios";
 
 const fetcher = async () => {
   return await getWatchlist([
@@ -20,7 +21,7 @@ export default function WatchListPage({ coins }) {
   const { data } = useQuery("watchlist", fetcher, {
     initialData: coins,
     refetchInterval: 30000,
-    refetchOnMount: true,
+    refetchIntervalInBackground: true,
   });
 
   return (
@@ -48,7 +49,12 @@ export default function WatchListPage({ coins }) {
 }
 
 export async function getStaticProps() {
-  const coins = await fetcher();
+  const { data } = await axios.get(
+    "/api/get-price?symbols=eth,ens,xsushi,ohm,matic,lrc,link",
+    {
+      baseURL: "https://natelook.com",
+    }
+  );
 
-  return { props: { coins }, revalidate: 30 };
+  return { props: { coins: data }, revalidate: 30 };
 }
