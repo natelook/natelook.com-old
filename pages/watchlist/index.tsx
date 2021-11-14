@@ -6,7 +6,6 @@ import axios from "axios";
 
 const fetcher = async () => {
   return await getWatchlist([
-    "btc",
     "eth",
     "ens",
     "xsushi",
