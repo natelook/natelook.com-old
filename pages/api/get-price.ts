@@ -50,3 +50,7 @@ const GetPrice = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default GetPrice;
+
+export const config = {
+  methods: ["GET"],
+};

@@ -7,10 +7,7 @@ const fetcher = async () => {
     "/api/get-price?symbols=eth,ens,xsushi,cro,lrc,matic,ohm",
     {
       // Update BASEURL later
-      baseURL:
-        process.env.NODE_ENV !== "development"
-          ? "https://natelook.com"
-          : "http://localhost:3000",
+      baseURL: "http://localhost:3000",
     }
   );
 
@@ -20,7 +17,7 @@ const fetcher = async () => {
 export default function WatchListPage({ coins }) {
   const { data } = useQuery("watchlist", fetcher, {
     initialData: coins,
-    refetchInterval: 30000,
+    refetchInterval: 10000,
   });
 
   return (
